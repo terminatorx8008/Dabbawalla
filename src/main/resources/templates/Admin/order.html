@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Admin/base::Layout(~{::section})">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<section>
+    <div class="dashboard">
+        <div class="request-heading">
+            <h1>Manage Tiffing Requests</h1>
+        </div>
+        <div class="request-box-container">
+            <div th:each="o:${orders}" class="request-box">
+                <div class="box-top">
+                    <div class="profile">
+                        <div class="profile-img">
+                            <img th:src="@{'/img/Customer/' + ${o.getCustomer().getCustomerId()} + '.jpg'}"
+                                 alt="Profile Photo">
+                        </div>
+                        <div class="name-user">
+                            <strong th:text="'Order ID :'+${o.getOrderId()}">John Doe</strong>
+                            <span th:text="${#dates.format(o.getOrderDate(), 'dd-MM-yyyy')}">Order Date</span>
+                            <span th:text="${#dates.format(o.getOrderDate(), 'HH:mm:ss')}">Order Time</span>
+                        </div>
+                    </div>
+                    <div class="buttom-box">
+                        <a th:href="@{'/order/accept-order/'+${o.getOrderId()}}">
+                            <div class="accept-order">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                        </a>
+                        <a th:href="@{'/order/reject-order/'+${o.getOrderId()}}">
+                            <div class="reject-order">
+                                <i class="fa-solid fa-x"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+                <div class="client-review">
+                    <p th:text="'Tiffining Address : '+${o.getCustomer().getCustomerAddress()}"></p>
+                    <p th:text="'Custumer Name : '+${o.getCustomer().getCustomerName()}"></p>
+                    <p th:text="'Custumer Number : '+${o.getCustomer().getCustomerContact()}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>

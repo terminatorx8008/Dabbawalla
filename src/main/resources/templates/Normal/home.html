@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Normal/base::Layout(~{::section})">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<section>
+    <div class="dashboard">
+        <div class="dashboard-banner">
+            <img src="https://images.unsplash.com/photo-1589010588553-46e8e7c21788?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                 alt="Image Banner">
+            <div class="banner-promo">
+                <h1><span>50% OFF</span></h1>
+                <h1>On All Tiffin Center</h1>
+                <p>Order Tiffin from favourite place near you.</p>
+            </div>
+        </div>
+        <h3 class="dashboard-title">Must Try</h3>
+        <div class="dashboard-menu">
+            <a href="">Favourites</a>
+            <a href="">Best Seller</a>
+            <a href="">Near Me</a>
+            <a href="">Promotion</a>
+            <a href="">Top Rated</a>
+            <a href="">All</a>
+        </div>
+        <div class="dashboard-content">
+            <div th:each="m:${messes}" class="dashboard-card" th:attr="onclick='openMessdetails(' + ${m.getMessId()} + ')'">
+                <div th:id="'carouselExampleSlidesOnly'+${m.getMessId()}" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div th:each="image, iterStat : ${m.getMessImage()}" th:classappend="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
+                            <img th:src="@{'/img/Mess/' + ${image.getMessImage()}}" src="/img/default.jpg" class="card-image"/>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" th:data-bs-target="'#carouselExample' + ${m.getMessId()}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" th:data-bs-target="'#carouselExample' + ${m.getMessId()}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <i class="fas fa-heart" id="heart"></i>
+                <div class="card-details">
+                    <h3 th:text="${m.getMessName()}">Amazing Pizza</h3>
+                    <div class="card-details-rating">
+                        <span>4.5</span>
+                        <span class="fas fa-star"></span>
+                        <span class="fas fa-star"></span>
+                        <span class="fas fa-star"></span>
+                        <span class="fas fa-star"></span>
+                        <span class="fas fa-star-half-alt"></span>
+                    </div>
+                    <p><i class="fa-solid fa-location-dot"></i>&nbsp;Address :<span
+                            th:text="${m.getMessAddress()}"></span></p>
+                    <p><i class="fa-regular fa-user"></i>&nbsp;Owner Name :<span
+                            th:text="${m.getMessOwnerName()}"></span></p>
+                    <p><i class="fa-solid fa-info"></i>&nbsp;Mess Details :<span
+                            th:text="${m.getMessDescription()}"></span></p>
+                </div>
+                <div class="buttons">
+                    <button onclick="addToCart()" class="card-button">
+                        Request Tiffing
+                    </button>
+                    <button class="contact-button"><label class="fa-solid fa-phone"></label> <span
+                            th:text="${m.getMessContact()}"></span></button>
+                    <button class="comment-button"><label class="fa-regular fa-comment"></label></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script th:src="@{/JS/script.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>

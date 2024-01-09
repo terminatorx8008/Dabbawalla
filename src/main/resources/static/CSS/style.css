@@ -1,0 +1,942 @@
+:root {
+    --mainColor: #f6f8fa;
+    --darkBlack: #2d2f31;
+    --darkGrey: #61666b;
+    --grey: #5d5d5d;
+    --lightGrey: #f2f2f2;
+    --yellow: #fecb40;
+    --red: #ea1943;
+    --darkBlue: #086788;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans JP", sans-serif;
+    outline: none;
+}
+
+body {
+    background-color: var(--mainColor);
+    width: 100%;
+    height: auto;
+    color: var(--darkBlack);
+}
+
+p {
+    font-size: 14px;
+}
+
+.logo {
+    background-image: linear-gradient(-45deg, #04befe 0%, #4481eb 100%);
+    position: sticky;
+    font-size: 1.5rem;
+    color: var(--lightGrey);
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    width: 100%;
+    text-align: center;
+    padding: 15px 0 15px 60px;
+    top: 0;
+    z-index: 2;
+}
+
+.label-cart {
+    color: #ffffff;
+    position: fixed;
+    font-size: 1.5rem;
+    top: 15px;
+    right: 10px;
+    z-index: 4;
+    cursor: pointer;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 100%;
+    background-color: var(--lightGrey);
+    z-index: 1;
+    padding-top: 70px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    line-height: 1.5;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+    padding: 10px 5px;
+    color: var(--darkGrey) !important;
+}
+
+.sidebar-menu a {
+    text-decoration: none;
+    font-size: 0.7rem;
+    line-height: 1.5;
+    color: var(--darkGrey) !important;
+}
+
+.sidebar-menu a i {
+    font-size: 1rem;
+    color: var(--darkGrey) !important;
+}
+
+.sidebar-menu:hover {
+    border-right: 2px solid var(--yellow);
+    color: var(--yellow) !important;
+    background-color: white;
+    font-size: x-large;
+}
+
+.sidebar-menu:hover a {
+    color: var(--yellow) !important;
+}
+
+.sidebar-menu:hover i {
+    color: var(--yellow) !important;
+}
+
+.sidebar-menu.active {
+    border-right: 2px solid var(--yellow);
+    color: var(--yellow) !important;
+}
+
+.sidebar-menu.active a {
+    color: var(--yellow) !important;
+}
+
+.dashboard {
+    height: 100%;
+    width: 100%;
+    padding-right: 10px;
+    padding-left: 60px;
+    transition: padding-right 0.3s ease;
+    border: none;
+    border-radius: 20px;
+}
+
+.dashboard-banner {
+    width: 100%;
+    height: 300px;
+    position: relative;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.dashboard-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 30px;
+}
+
+.banner-promo {
+    position: absolute;
+    top: 20%;
+    left: 2%;
+    color: var(--lightGrey);
+}
+
+.banner-promo h1 span {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--yellow);
+}
+
+.dashboard-title {
+    margin-top: 0.2rem;
+    padding: 0 1rem;
+}
+
+.dashboard-menu {
+    margin-top: 0.2rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+}
+
+.dashboard-menu a {
+    text-decoration: none;
+    color: var(--darkBlack);
+    border-radius: 20px;
+    min-width: 130px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--yellow);
+    text-align: center;
+}
+
+.dashboard-menu a:hover {
+    background-color: var(--red);
+    font-weight: 600;
+    color: var(--lightGrey);
+}
+
+/*make 2 column in dashboard content */
+.dashboard-content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: left;
+    gap: 20px;
+    /* make it a slow transition*/
+    transition: all 0.3s ease;
+    padding: 0 1rem;
+    margin-top: 1rem;
+}
+
+/*flex it and divide it in 2 col 1st of image to the left and 2nd col of details*/
+.dashboard-card {
+    width: 600px;
+    height: auto;
+    padding: 0.5rem 0.5rem;
+    line-height: 1.5;
+    position: relative;
+    border-radius: 15px;
+    background-color: var(--lightGrey);
+    cursor: pointer;
+}
+
+.dashboard-card:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.card-image {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin-right: 10px;
+    border-radius: 15px;
+    float: left;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: black;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.card-details {
+    width: 350px;
+    float: left;
+    height: 100%;
+    position: relative;
+    margin: 0 10px;
+}
+
+/* add filter property to have a black outline*/
+#heart {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 1.2rem;
+    color: white;
+    font-size: 2rem;
+    filter: drop-shadow(0 0 0.5px var(--darkBlack));
+}
+
+#heart:hover {
+    color: var(--red);
+    filter: drop-shadow(0 0 0.25rem red);
+}
+
+.card-details p {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--darkGrey);
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.card-details p span {
+    margin: 0 2px;
+}
+
+/* make to 10px above the buttom of the card*/
+.buttons {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: end;
+    align-items: flex-end;
+    margin: 0 10px;
+    height: 40px;
+}
+
+.card-button {
+    width: 150px;
+    height: 100%;
+    text-align: center;
+    background-color: var(--yellow);
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.card-button:hover {
+    background-color: var(--red);
+    color: #f2f2f2;
+
+    .card-button i {
+        color: #AC0D2DFF;
+    }
+}
+
+.card-button i {
+    font-weight: 600;
+    margin: 5px;
+    color: #B98100FF;
+}
+
+.contact-button {
+    width: 150px;
+    height: 100%;
+    text-align: center;
+    margin-left: 5px;
+    background-color: green;
+    font-size: 15px;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.comment-button {
+    width: 50px;
+    height: 100%;
+    text-align: center;
+    margin-left: 5px;
+    background-color: lightgrey;
+    font-weight: 600;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.comment-button:hover {
+    background-color: #E2E2E2FF;
+}
+
+.contact-button:hover {
+    background-color: #04cb04;;
+    color: #f2f2f2;
+}
+
+.contact-button span {
+    color: white;
+    font-weight: 600;
+    margin: 5px;
+}
+
+.dashboard-order {
+    display: none !important;
+    width: 340px;
+    min-height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    background-color: var(--mainColor);
+    z-index: 3;
+}
+
+.dashboard-order h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 10px;
+    color: var(--darkGrey);
+}
+
+.dashboard-order h4 {
+    line-height: 2;
+}
+
+/*move it to the right side of the card*/
+.card-details-rating {
+    color: green;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.order-time {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--darkGrey);
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.order-time #time {
+    font-weight: 1000;
+    float: left;
+}
+
+.order-time #distance {
+    font-weight: 1000;
+    float: right;
+}
+
+.order-wapper {
+    height: 180px;
+    width: 100%;
+    overflow-y: scroll;
+    margin: 20px 0;
+}
+
+.order-wapper::-webkit-scrollbar {
+    width: 7px;
+}
+
+.order-wapper::-webkit-scrollbar-track {
+    background-color: var(--lightGrey);
+    border-radius: 20px;
+}
+
+.order-wapper::-webkit-scrollbar-thumb {
+    background-color: var(--darkGrey);
+    border-radius: 20px;
+}
+
+.order-card {
+    display: grid;
+    grid-template-columns: 0.6fr 1fr 0.5fr;
+    padding: 10px 0;
+    gap: 5px;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.order-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.order-details input {
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    border: 2px solid var(--darkGrey);
+    border-radius: 10px;
+    background-color: transparent;
+    margin-left: 10px;
+}
+
+.divider {
+    width: 100%;
+    border: 1px dashed var(--darkGrey);
+}
+
+.order-total p {
+    padding: 10px 0;
+}
+
+.order-total p span {
+    float: right;
+    font-weight: 700;
+}
+
+.order-promo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--lightGrey);
+    border-radius: 10px;
+    border: 2px solid var(--darkGrey);
+    height: 45px;
+    padding: 0 5px;
+    margin: 5px 0 10px 0;
+}
+
+.input-promo {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--darkGrey);
+}
+
+.promo-buttom {
+    float: right;
+    background-color: var(--yellow);
+    border: none;
+    border-radius: 5px;
+    height: 80%;
+    width: 40%;
+    cursor: pointer;
+}
+
+.promo-buttom:hover {
+    background-color: var(--red);
+    color: #f2f2f2;
+    font-weight: 600;
+}
+
+.checkout {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    background-color: var(--yellow);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.checkout:hover {
+    background-color: var(--red);
+    color: #f2f2f2;
+    font-weight: 600;
+}
+
+#cart {
+    display: none;
+}
+
+#cart:checked ~ .label-cart {
+    color: var(--darkBlack);
+}
+
+#cart:checked ~ .dashboard-order {
+    display: block !important;
+    box-shadow: -20px 0 5px rgba(0, 0, 0, 0.4);
+}
+
+/*make change-password right to the profile-container*/
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.profile-container {
+    max-width: 600px;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto 20px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-details {
+    text-align: center;
+}
+
+.profile-details h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.profile-details p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.edit-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.edit-icon {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: x-large;
+    background: linear-gradient(-45deg, #04befe 0%, #4481eb 100%);
+    color: #fff;
+    border-bottom-left-radius: 15px;
+    cursor: pointer;
+}
+
+/*center the button*/
+
+.edit-form button {
+    background-color: #086788;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: x-large;
+    color: #fff;
+    padding: 10px 20px;
+    align-items: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-input {
+    display: none;
+}
+
+/* Additional styles for the change-password class */
+.change-password {
+    max-width: 600px;
+    padding: 20px;
+    border: none;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.change-password h2 {
+    text-align: center;
+    margin: 10px;
+}
+
+.change-password label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.change-password input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.change-password button {
+    background-color: #086788;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: x-large;
+    color: #fff;
+    padding: 10px 20px;
+    align-items: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-overlay {
+    position: fixed;
+    left: -500px;
+    top: 60px;
+    width: 500px;
+    height: 100%;
+    border-radius: 15px;
+    background: var(--lightGrey);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    z-index: 0;
+}
+
+.search-box-container {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.search-box {
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    background-color: #fff;
+    border: none;
+    padding: 0 20px;
+    font-size: 1rem;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: var(--darkGrey);
+    cursor: pointer;
+}
+
+.searchResults {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    margin: 20px 0;
+}
+.search-result-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+.search-result-card a{
+    text-decoration: none;
+    color: var(--darkGrey);
+}
+
+.search-result-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.search-result-description {
+    flex: 1;
+}
+
+.search-result-location {
+    margin-top: auto;
+    text-align: right;
+    font-size: 14px;
+    color: #666;
+}
+
+.mess-detail-card {
+    width: 100%;
+    height: auto;
+    margin-top: 0.8rem;
+    line-height: 1.5;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    background-color: var(--lightGrey);
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+}
+
+.image-grid {
+    --gap: 5px;
+    --num-cols: 4;
+    --row-height: 200px;
+
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: repeat(var(--num-cols), 1fr);
+    grid-auto-rows: var(--row-height);
+    gap: var(--gap);
+    border-radius: 15px;
+
+}
+
+.image-grid > img {
+    background: #000;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: cover;
+}
+
+.image-grid > img:hover {
+    opacity: 0.5;
+    transition: all .2s ease .1s;
+
+}
+
+.image-grid-col-2 {
+    grid-column: span 2;
+}
+
+.image-grid-row-2 {
+    grid-row: span 2;
+}
+
+/* Anything udner 1024px */
+@media screen and (max-width: 1024px) {
+    .image-grid {
+        --num-cols: 2;
+        --row-height: 200px;
+    }
+}
+
+
+.mess-detail-card-details {
+    width: 100%;
+    float: left;
+    margin: 10px;
+    padding: 5px;
+}
+
+.mess-buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    height: 40px;
+}
+
+
+.main-container {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.main-box {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--lightGrey);
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.side-box-container {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+}
+
+.side-box {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--lightGrey);
+    width: 100%;
+    height: 100px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+
+/* Add this CSS for the footer */
+.footer {
+    background: linear-gradient(-45deg, #04befe 0%, #4481eb 100%);
+    color: #fff;
+    margin-top: 10px;
+    padding: 50px;
+    border: none;
+    text-align: center;
+    border-top-left-radius: 20px;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Additional styles for links in the footer */
+.footer a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.carousel {
+    width: 200px !important;
+    float: left;
+}
+
+/*add a media query to make cards vertical after 663*/
+@media screen and (max-width: 702px) {
+    .dashboard-content {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .dashboard-card {
+        width: 300px;
+        height: 450px;
+        padding: 0.5rem 0.5rem;
+        line-height: 1.5;
+        position: relative;
+        border-radius: 15px;
+        background-color: var(--lightGrey);
+        cursor: pointer;
+    }
+
+    .card-details {
+        width: 100%;
+        float: none;
+        height: 100%;
+        position: relative;
+        margin: 0 10px;
+    }
+
+    .carousel {
+        float: none;
+        margin: auto;
+        width: 100% !important;
+    }
+
+    .buttons {
+        left: 0;
+        right: 0;
+        height: 50px;
+    }
+
+    .card-image {
+        object-fit: cover;
+        margin: 5px;
+        width: 100%;
+    }
+
+}

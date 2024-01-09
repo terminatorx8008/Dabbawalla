@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Normal/base::Layout(~{::section})">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<section>
+    <div class="dashboard">
+        <div class="mess-detail-card">
+            <div class="image-grid">
+                <img th:each="images:${mess.getMessImage()}" th:src="@{'/img/Mess/' + ${images.getMessImage()}}">
+            </div>
+            <div class="mess-detail-card-details">
+                <h3 th:text="${mess.getMessName()}">Amazing Pizza</h3>
+                <div class="card-details-rating">
+                    <span>4.5</span>
+                    <span class="fas fa-star"></span>
+                    <span class="fas fa-star"></span>
+                    <span class="fas fa-star"></span>
+                    <span class="fas fa-star"></span>
+                    <span class="fas fa-star-half-alt"></span>
+                </div>
+                <p><i class="fa-solid fa-location-dot"></i>&nbsp;Address :<span
+                        th:text="${mess.getMessAddress()}"></span></p>
+                <p><i class="fa-solid fa-phone"></i>&nbsp;Contact :<span
+                        th:text="${mess.getMessContact()}"></span></p>
+                <p><i class="fa-solid fa-phone"></i>&nbsp;Owner :<span
+                        th:text="${mess.getMessOwnerName()}"></span></p>
+                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Open Time :<span-->
+                <!--                        th:text="${mess.getMessOpenTime()}"></span></p>-->
+                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Close Time :<span-->
+                <!--                        th:text="${mess.getMessCloseTime()}"></span></p>-->
+                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Open Days :<span-->
+                <!--                        th:text="${mess.getMessOpenDays()}"></span></p>-->
+                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Close Days :<span-->
+                <!--                        th:text="${mess.getMessCloseDays()}"></span></p>-->
+                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Description :<span-->
+                <!--                        th:text="${mess.getMessDescription()}"></span></p>-->
+                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Status :<span th:text="${mess.getMessStatus()}"></span></p>-->
+                <div class="mess-buttons">
+                    <button onclick="addToCart()" class="card-button">
+                        Request Tiffing
+                    </button>
+                    <button class="contact-button"><label class="fa-solid fa-phone"></label> <span
+                            th:text="${mess.getMessContact()}"></span></button>
+                    <button class="comment-button"><label class="fa-regular fa-comment"></label></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <div class="main-box">
+                <!-- Main box content goes here -->
+            </div>
+            <div class="side-box-container">
+                <div class="side-box">
+                    <!-- Side box 1 content goes here -->
+                </div>
+                <div class="side-box">
+                    <!-- Side box 2 content goes here -->
+                </div>
+                <div class="side-box">
+                    <!-- Side box 3 content goes here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>
