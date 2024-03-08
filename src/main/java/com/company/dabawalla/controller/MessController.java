@@ -1,13 +1,7 @@
 package com.company.dabawalla.controller;
 
-import com.company.dabawalla.dao.MenuRepo;
-import com.company.dabawalla.dao.MessImagesRepo;
-import com.company.dabawalla.dao.MessRepo;
-import com.company.dabawalla.dao.OrderRepo;
-import com.company.dabawalla.entities.Menu;
-import com.company.dabawalla.entities.Mess;
-import com.company.dabawalla.entities.MessImages;
-import com.company.dabawalla.entities.Orders;
+import com.company.dabawalla.dao.*;
+import com.company.dabawalla.entities.*;
 import com.company.dabawalla.helper.Message;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +32,14 @@ public class MessController {
     @Autowired
     private MenuRepo menuRepo;
     @Autowired
-    private OrderRepo orderRepo;
-    @Autowired
     private MessImagesRepo messImagesRepo;
+    @Autowired
+    private MessReviewRepo messReviewRepo;
 
     @RequestMapping("/home")
     public String adminHome(Model model, Principal principal) {
         this.mess = messRepo.findByMessEmail(principal.getName());
+//        List<Customer> customers = mess.getC();
         return "Admin/home";
     }
 
@@ -127,17 +122,11 @@ public class MessController {
         return "redirect:/mess/menu";
     }
 
-    @RequestMapping("/order-details")
-    public String adminDelivery(Model model) {
-//        findByOrderStatus and order.messId = mess.messId
-        System.out.println(mess.getMessId());
-        List<Orders> orders = orderRepo.findByOrderStatusAndMessId("pending", mess.getMessId());
-        model.addAttribute("orders", orders);
-        return "Admin/order";
-    }
 
     @RequestMapping("/reviews")
-    public String adminReviews() {
+    public String adminReviews(Model model) {
+        List<MessReview> messReview = messReviewRepo.findMessReviewByMess(mess);
+        model.addAttribute("messReviews",messReview);
         return "Admin/review";
     }
 

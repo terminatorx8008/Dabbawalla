@@ -10,66 +10,204 @@
 <body>
 <section>
     <div class="dashboard">
+        <div th:if="${session.subscriptionMessage}" th:classappend="${'alert-'+session.subscriptionMessage.getType()}" class="alert" role="alert">
+            <strong th:text="${session.subscriptionMessage.getContent()}">Success!</strong>
+            <label class="closebtn" onclick="this.parentElement.style.display='none';">&times</label>
+        </div>
         <div class="mess-detail-card">
             <div class="image-grid">
                 <img th:each="images:${mess.getMessImage()}" th:src="@{'/img/Mess/' + ${images.getMessImage()}}">
             </div>
             <div class="mess-detail-card-details">
-                <h3 th:text="${mess.getMessName()}">Amazing Pizza</h3>
-                <div class="card-details-rating">
-                    <span>4.5</span>
-                    <span class="fas fa-star"></span>
-                    <span class="fas fa-star"></span>
-                    <span class="fas fa-star"></span>
-                    <span class="fas fa-star"></span>
-                    <span class="fas fa-star-half-alt"></span>
+                <div class="left">
+                    <h3 th:text="${mess.getMessName()}">Amazing Pizza</h3>
+                    <div class="card-details-rating">
+                        <span>4.5</span>
+                        <span class="fas fa-star"></span>
+                        <span class="fas fa-star"></span>
+                        <span class="fas fa-star"></span>
+                        <span class="fas fa-star"></span>
+                        <span class="fas fa-star-half-alt"></span>
+                    </div>
+                    <p><i class="fa-solid fa-location-dot"></i>&nbsp;Address :<span
+                            th:text="${mess.getMessAddress()}"></span></p>
+                    <p><i class="fa-solid fa-phone"></i>&nbsp;Contact :<span
+                            th:text="${mess.getMessContact()}"></span></p>
+                    <p><i class="fa-solid fa-user"></i>&nbsp;Owner :<span
+                            th:text="${mess.getMessOwnerName()}"></span></p>
+
+                    <div class="buttons">
+                        <button th:classappend="${subscription.isSubscribtionStatus()?'hide':'show'}" th:attr="messId=${mess.getMessId()}" onclick="openSubscriptionBox()" class="card-button">
+                            Request Tiffing
+                        </button>
+                        <button th:classappend="${subscription.isSubscribtionStatus()?'show':'hide'}" th:attr="messId=${mess.getMessId()}" onclick="requestCancellation(this)" class="card-button cancel">
+                            Cancel Tiffing
+                        </button>
+                        <button class="contact-button">
+                            <a th:href="'https://wa.me/91'+${mess.getMessContact()}" target="_blank">
+                                <label class="fa-brands fa-whatsapp"></label>
+                                <span th:text="${mess.getMessContact()}"></span>
+                            </a>
+                        </button>
+                    </div>
                 </div>
-                <p><i class="fa-solid fa-location-dot"></i>&nbsp;Address :<span
-                        th:text="${mess.getMessAddress()}"></span></p>
-                <p><i class="fa-solid fa-phone"></i>&nbsp;Contact :<span
-                        th:text="${mess.getMessContact()}"></span></p>
-                <p><i class="fa-solid fa-phone"></i>&nbsp;Owner :<span
-                        th:text="${mess.getMessOwnerName()}"></span></p>
-                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Open Time :<span-->
-                <!--                        th:text="${mess.getMessOpenTime()}"></span></p>-->
-                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Close Time :<span-->
-                <!--                        th:text="${mess.getMessCloseTime()}"></span></p>-->
-                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Open Days :<span-->
-                <!--                        th:text="${mess.getMessOpenDays()}"></span></p>-->
-                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Close Days :<span-->
-                <!--                        th:text="${mess.getMessCloseDays()}"></span></p>-->
-                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Description :<span-->
-                <!--                        th:text="${mess.getMessDescription()}"></span></p>-->
-                <!--                <p><i class="fa-solid fa-clock"></i>&nbsp;Status :<span th:text="${mess.getMessStatus()}"></span></p>-->
-                <div class="mess-buttons">
-                    <button onclick="addToCart()" class="card-button">
-                        Request Tiffing
-                    </button>
-                    <button class="contact-button"><label class="fa-solid fa-phone"></label> <span
-                            th:text="${mess.getMessContact()}"></span></button>
-                    <button class="comment-button"><label class="fa-regular fa-comment"></label></button>
+                <div class="right">
+                    <div class="iocn-container">
+                        <div th:classappend="${subscription.isSubscribtionStatus()?'show':'hide'}" class="subscribed-icon"><i class="fa-regular fa-circle-check"></i></div>
+                        <div th:classappend="${mess.getFaviorateCustomers().contains(user) ? 'favorited' : ''}"   class="fas fa-heart" th:attr="messId=${mess.getMessId()}"  onclick="addToFav(this)" id="heart1"></div>
+                    </div>
                 </div>
             </div>
         </div>
-
         <div class="main-container">
             <div class="main-box">
-                <!-- Main box content goes here -->
+                <div class="info-container">
+                    <div class="general-info-container">
+                        <div class="part">
+                            <h4>Quick information</h4>
+                            <div class="sub-parts">
+                                <span>Cuisine:</span>
+                                <span>Dal Bati churma , laccha paratha ,all vegi paratha</span>
+                            </div>
+                            <div class="sub-parts">
+                                <span>Type:</span>
+                                <span>Veg</span>
+                            </div>
+                        </div>
+                        <div class="part">
+                            <h4>Timing</h4>
+                            <div class="sub-parts">
+                                <span>Lunch:</span>
+                                <span>11:30 am - 2:30 pm</span>
+                            </div>
+                            <div class="sub-parts">
+                                <span>Dinner:</span>
+                                <span>5:30 pm - 10:00 pm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <!--    make the menu cards here -->
+                <div class="menu-container">
+                    <h4><span id="day">Moday's</span> Menu</h4>
+                    <div class="menu-cards">
+                        <div th:each="menu:${menus}" class="menu-card">
+                            <div class="menu-card-image">
+                                <img th:src="@{'/img/Menu/'+${menu.getMenuId()+'.jpg'}}" alt="">
+                            </div>
+                            <div class="menu-card-details">
+                                <h5 th:text="${menu.getMenuName()}">Menu Item 1</h5>
+                                <p>Price : <span th:text="${menu.getMenuPrice()}"></span>&#8377;</p>
+                                <p th:text="${menu.getMenuDescription()}">Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Quisquam, voluptatum.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+                <div class="reviews-box" id="carouselExample">
+                    <h4>Comment Section : </h4>
+                    <div class="review-carousel">
+                        <div th:each="m:${allMessReviews}" class="review-box">
+                            <div class="box-top">
+                                <div class="profile">
+                                    <div class="profile-img">
+                                        <img th:src="@{'/img/Customer/'+${m.getCustomer().getCustomerImage()}}" alt="">
+                                    </div>
+                                    <div class="name-user">
+                                        <strong th:text="${m.getCustomer().getCustomerName()}">John Doe</strong>
+                                        <p th:text="${m.getMessReviewDate()}">Customer</p>
+                                    </div>
+                                </div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="client-review">
+                                <p th:text="${m.getMessReview()}">Lorem ipsum dolor sit amet consectetur adipisicing
+                                    elit. Quisquam, voluptatum.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="side-box-container">
                 <div class="side-box">
-                    <!-- Side box 1 content goes here -->
+                    <h3>Write your suggestion....</h3>
+                    <div class="suggestion-box">
+                        <div th:if="${session.message}" th:classappend="${'alert-'+session.message.getType()}"
+                             class="alert" role="alert">
+                            <strong th:text="${session.message.getContent()}">Success!</strong>
+                            <label class="closebtn" onclick="this.parentElement.style.display='none';">&times;</label>
+                        </div>
+
+                        <div class="comment-form">
+                            <form th:action="@{'/user/save-comment/'+${mess.getMessId()}}" method="post">
+                                <textarea class="form-control" name="comment" id="suggestion"
+                                          placeholder="Write your suggestion here"></textarea>
+                                <button class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="side-box">
-                    <!-- Side box 2 content goes here -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.757911195505!2d75.84556307657819!3d22.700054305193675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fdaca5739ae1%3A0x4d96f8bd2eb77a91!2sLal%20Bagh%20Palace!5e0!3m2!1sen!2sin!4v1705821887661!5m2!1sen!2sin"
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
                 <div class="side-box">
                     <!-- Side box 3 content goes here -->
                 </div>
             </div>
         </div>
-
+        <div class="toggle-suggestions" id="toggle-suggestions">
+        <div class="Subscription-box-container">
+            <div class="Subscription-box">
+                <h3>Subscribe to our mess</h3>
+                <label class="close-button " onclick="closeSubscriptionBox()"><i class="fas fa-times"></i></label>
+                <div class="Subscription-box-form">
+                    <form th:action="@{'/user/save-subscription/'+${mess.getMessId()}}" th:object="${subscription}" method="post">
+                        <div class="form-group">
+                            <label for="subscription">Select your subscription</label>
+                            <select class="form-control" id="subscription" name="subscriptionDuration" required>
+                                <option value="1">1 Month </option>
+                                <option value="3">3 Month </option>
+                                <option value="6">6 Month </option>
+                                <option value="12">12 Month</option>
+                            </select>
+                            <label for="subscription">Select Starting Date</label>
+                            <input type="date" class="form-control" id="date" name="subscribtionStartDate" required>
+                            <label for="subscription">Select Number of Tiffin</label>
+                            <input type="number" class="form-control" id="tiffin" name="numberOfTiffin" required>
+                            <label for="subscription">Confirm Address</label>
+                            <input type="text" class="form-control" id="address" name="userAddress" th:value="${user.getCustomerAddress()}" required>
+                        </div>
+                        <button class="Subscription-button">Subscribe</button>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <srcipt src="Js/UserScript.js"></srcipt>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        let d = new Date();
+        let days = ["Sunday's", "Monday's", "Tuesday's", "Wednesday's", "Thursday's", "Friday's", "Saturday's"];
+        document.getElementById("day").innerText = days[d.getDay()];
+        document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').setAttribute('min', today);
+        });
+
+    </script>
 </section>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

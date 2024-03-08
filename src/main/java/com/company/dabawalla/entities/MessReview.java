@@ -1,37 +1,32 @@
 package com.company.dabawalla.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
+import java.util.Date;
 
 @Entity
 public class MessReview {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int messReviewId;
-    private int costumerId;
     private String messReview;
     private String messRating;
-    private String messReviewDate;
-    private String messReviewTime;
+    private Date messReviewDate;
     @ManyToOne
     @JoinColumn(name = "mess_id")
     private Mess mess;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     public MessReview() {
     }
 
-    public MessReview(int messReviewId, int costumerId, String messReview, String messRating, String messReviewDate, String messReviewTime, Mess mess, Customer customer) {
+    public MessReview(int messReviewId, String messReview, String messRating, Date messReviewDate, Mess mess, Customer customer) {
         this.messReviewId = messReviewId;
-        this.costumerId = costumerId;
         this.messReview = messReview;
         this.messRating = messRating;
         this.messReviewDate = messReviewDate;
-        this.messReviewTime = messReviewTime;
         this.mess = mess;
         this.customer = customer;
     }
@@ -44,13 +39,6 @@ public class MessReview {
         this.messReviewId = messReviewId;
     }
 
-    public int getCostumerId() {
-        return costumerId;
-    }
-
-    public void setCostumerId(int costumerId) {
-        this.costumerId = costumerId;
-    }
 
     public String getMessReview() {
         return messReview;
@@ -68,20 +56,12 @@ public class MessReview {
         this.messRating = messRating;
     }
 
-    public String getMessReviewDate() {
+    public Date getMessReviewDate() {
         return messReviewDate;
     }
 
-    public void setMessReviewDate(String messReviewDate) {
+    public void setMessReviewDate(Date messReviewDate) {
         this.messReviewDate = messReviewDate;
-    }
-
-    public String getMessReviewTime() {
-        return messReviewTime;
-    }
-
-    public void setMessReviewTime(String messReviewTime) {
-        this.messReviewTime = messReviewTime;
     }
 
     public Mess getMess() {
@@ -100,17 +80,4 @@ public class MessReview {
         this.customer = customer;
     }
 
-    @Override
-    public String toString() {
-        return "MessReview{" +
-                "messReviewId=" + messReviewId +
-                ", costumerId=" + costumerId +
-                ", messReview='" + messReview + '\'' +
-                ", messRating='" + messRating + '\'' +
-                ", messReviewDate='" + messReviewDate + '\'' +
-                ", messReviewTime='" + messReviewTime + '\'' +
-                ", mess=" + mess +
-                ", customer=" + customer +
-                '}';
-    }
 }

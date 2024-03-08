@@ -47,7 +47,7 @@ public class LoginConfiguration {
                                 .loginPage("/")
                                 .loginProcessingUrl("/dologin")
                                 .defaultSuccessUrl("/redirectBasedOnRole",true)
-                                .failureUrl("/login?error")
+                                .failureUrl("/error-login")
                 )
                 .logout(
                         logout -> logout

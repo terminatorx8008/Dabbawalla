@@ -1,9 +1,11 @@
 package com.company.dabawalla.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Customer {
@@ -17,19 +19,23 @@ public class Customer {
     private String customerRole;
     private String customerPassword;
     private String customerImage;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer",fetch = FetchType.EAGER)
     private List<CustomerReview> customerReview=new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer",fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<MessReview> messReview=new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer",fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Subscribtion> subscribtions=new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer",fetch = FetchType.EAGER)
-    private List<Orders> orders=new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL,mappedBy = "faviorateCustomers",fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Mess> faviorateMesses=new ArrayList<>();
 
     public Customer() {
     }
 
-    public Customer(int customerId, String customerName, String customerAddress, String customerContact, String customerEmail, String customerRole, String customerPassword, String customerImage, List<CustomerReview> customerReview, List<MessReview> messReview, List<Subscribtion> subscribtions, List<Orders> orders) {
+    public Customer(int customerId, String customerName, String customerAddress, String customerContact, String customerEmail, String customerRole, String customerPassword, String customerImage, List<CustomerReview> customerReview, List<MessReview> messReview, List<Subscribtion> subscribtions) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerAddress = customerAddress;
@@ -41,7 +47,6 @@ public class Customer {
         this.customerReview = customerReview;
         this.messReview = messReview;
         this.subscribtions = subscribtions;
-        this.orders = orders;
     }
 
     public int getCustomerId() {
@@ -132,29 +137,33 @@ public class Customer {
         this.subscribtions = subscribtions;
     }
 
-    public List<Orders> getOrders() {
-        return orders;
+    public List<Mess> getFaviorateMesses() {
+        return faviorateMesses;
     }
 
-    public void setOrders(List<Orders> orders) {
-        this.orders = orders;
+    public void setFaviorateMesses(List<Mess> faviorateMesses) {
+        this.faviorateMesses = faviorateMesses;
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(customerId, customer.customerId);
+    }
+
+    public boolean isSubscribedToMess(Mess mess){
+        for(Subscribtion subscribtion:subscribtions){
+            if(subscribtion.getMess().equals(mess)&& subscribtion.isSubscribtionStatus()){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
-    public String toString() {
-        return "Customer{" +
-                "customerId=" + customerId +
-                ", customerName='" + customerName + '\'' +
-                ", customerAddress='" + customerAddress + '\'' +
-                ", customerContact='" + customerContact + '\'' +
-                ", customerEmail='" + customerEmail + '\'' +
-                ", customerRole='" + customerRole + '\'' +
-                ", customerPassword='" + customerPassword + '\'' +
-                ", customerImage='" + customerImage + '\'' +
-                ", customerReview=" + customerReview +
-                ", messReview=" + messReview +
-                ", subscribtions=" + subscribtions +
-                ", orders=" + orders +
-                '}';
+    public int hashCode() {
+        return Objects.hash(customerId);
     }
 }

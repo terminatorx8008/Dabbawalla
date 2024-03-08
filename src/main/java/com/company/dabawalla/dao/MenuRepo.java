@@ -15,5 +15,7 @@ public interface MenuRepo extends JpaRepository<Menu, Integer> {
     public List<Menu> selectAllMenu();
 
     public Menu findByMenuId(int menuId);
-    public Menu findByMess(Mess mess);
+    @Query("SELECT m FROM Menu m JOIN m.mess mess WHERE mess.messId = :messId AND m.menuDay = :menuDay")
+    public List<Menu> findByMessIdAndMenuDay(int messId, String menuDay);
+
 }

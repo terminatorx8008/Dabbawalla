@@ -15,4 +15,7 @@ public interface MessRepo extends JpaRepository<Mess, Integer> {
 
     @Query("select m from Mess m where m.messName like %:query%")
      public List<Mess> findByMessNameContainingIgnoreCase(String query);
+
+    @Query("select m from Mess m where m.messAddress like %:city%")
+    List<Mess> findByCityContainingIgnoreCase(String city);
 }

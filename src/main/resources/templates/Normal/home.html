@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Normal/base::Layout(~{::section})">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Normal/base::Layout(~{::section})"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +10,7 @@
 </head>
 <body>
 <section>
-    <div class="dashboard">
+    <div id="user-dashboard" class="dashboard">
         <div class="dashboard-banner">
             <img src="https://images.unsplash.com/photo-1589010588553-46e8e7c21788?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                  alt="Image Banner">
@@ -21,32 +22,51 @@
         </div>
         <h3 class="dashboard-title">Must Try</h3>
         <div class="dashboard-menu">
-            <a href="">Favourites</a>
-            <a href="">Best Seller</a>
-            <a href="">Near Me</a>
-            <a href="">Promotion</a>
-            <a href="">Top Rated</a>
-            <a href="">All</a>
+            <div class="menu-item dropdown">
+                <a href="#">Sort By<i class="fa-solid fa-angle-down"></i></a>
+                <div class="sub-menu">
+                    <div class="sub-menu-item"><a href="#">Price</a></div>
+                    <div class="sub-menu-item"><a href="#">Relevance</a></div>
+                    <div class="sub-menu-item"><a href="#">Rating</a></div>
+                    <div class="sub-menu-item"><a href="#">Popular</a></div>
+                    <div class="sub-menu-item"><a href="#">Distance</a></div>
+                </div>
+            </div>
+            <div class="menu-item dropdown">
+                <a href="#">Amenities<i class="fa-solid fa-angle-down"></i></a>
+                <div class="sub-menu">
+                    <div class="sub-menu-item"><a href="#">Pure Vegetarian</a></div>
+                    <div class="sub-menu-item"><a href="#">Buffet</a></div>
+                    <div class="sub-menu-item"><a href="#">Dine-in</a></div>
+                    <div class="sub-menu-item"><a href="#">Take Away Only</a></div>
+                    <div class="sub-menu-item"><a href="#">Home Kitchen</a></div>
+                </div>
+            </div>
+            <div class="menu-item dropdown">
+                <a href="#">Rating<i class="fa-solid fa-angle-down"></i></a>
+                <div class="sub-menu">
+                    <div class="sub-menu-item"><a href="#">1+ Star</a></div>
+                    <div class="sub-menu-item"><a href="#">2+ Stars</a></div>
+                    <div class="sub-menu-item"><a href="#">3+ Stars</a></div>
+                    <div class="sub-menu-item"><a href="#">4+ Stars</a></div>
+                </div>
+            </div>
+            <div class="menu-item"><a href="#">Online Ordering</a></div>
+            <div class="menu-item"><a href="#">Open Now</a></div>
+            <div class="menu-item"><a href="#">Contact</a></div>
+            <div class="menu-item"><a href="#">FAQ</a></div>
         </div>
         <div class="dashboard-content">
-            <div th:each="m:${messes}" class="dashboard-card" th:attr="onclick='openMessdetails(' + ${m.getMessId()} + ')'">
+            <div th:each="m:${messes}" class="dashboard-card">
+                <div th:classappend="${m.getFaviorateCustomers().contains(user) ? 'favorited' : ''}"   class="fas fa-heart" th:attr="messId=${m.getMessId()}"  onclick="addToFav(this)" id="heart"></div>
                 <div th:id="'carouselExampleSlidesOnly'+${m.getMessId()}" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div th:each="image, iterStat : ${m.getMessImage()}" th:classappend="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
                             <img th:src="@{'/img/Mess/' + ${image.getMessImage()}}" src="/img/default.jpg" class="card-image"/>
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" th:data-bs-target="'#carouselExample' + ${m.getMessId()}" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" th:data-bs-target="'#carouselExample' + ${m.getMessId()}" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
-                <i class="fas fa-heart" id="heart"></i>
-                <div class="card-details">
+                <div class="card-details" th:attr="onclick='openMessdetails(' + ${m.getMessId()} + ')'">
                     <h3 th:text="${m.getMessName()}">Amazing Pizza</h3>
                     <div class="card-details-rating">
                         <span>4.5</span>
@@ -64,17 +84,25 @@
                             th:text="${m.getMessDescription()}"></span></p>
                 </div>
                 <div class="buttons">
-                    <button onclick="addToCart()" class="card-button">
+                    <button th:classappend="${user.isSubscribedToMess(m)?'hide':'show'}" th:attr="messId=${m.getMessId()}" onclick="openSubscriptionBox()" class="card-button">
                         Request Tiffing
                     </button>
-                    <button class="contact-button"><label class="fa-solid fa-phone"></label> <span
-                            th:text="${m.getMessContact()}"></span></button>
-                    <button class="comment-button"><label class="fa-regular fa-comment"></label></button>
+                    <button th:classappend="${user.isSubscribedToMess(m)?'show':'hide'}" th:attr="messId=${m.getMessId()}" onclick="requestCancellation(this)" class="card-button cancel">
+                        Cancel Tiffing
+                    </button>
+                    <button class="contact-button">
+                        <a th:href="'https://wa.me/91'+${m.getMessContact()}" target="_blank">
+                            <label class="fa-brands fa-whatsapp"></label>
+                            <span th:text="${m.getMessContact()}"></span>
+                        </a>
+                    </button>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
+<script th:src="@{/JS/UserScript.js}"></script>
 <script th:src="@{/JS/script.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

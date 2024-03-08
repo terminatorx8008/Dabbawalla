@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 public class CustomerReview {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int customerReviewId;
     private String customerReview;
     private String customerRating;

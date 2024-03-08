@@ -12,6 +12,7 @@ sign_up_btn.addEventListener("click", () => {
 sign_in_btn.addEventListener("click", () => {
     container.classList.remove("sign-up-mode");
 });
+
 function filterMenu(category) {
     const items = document.querySelectorAll('.menu-item');
     items.forEach(item => {
@@ -22,6 +23,7 @@ function filterMenu(category) {
         }
     });
 }
+
 function filterMenuByDay(day) {
     const items = document.querySelectorAll('.menu-item');
     items.forEach(item => {
@@ -92,6 +94,7 @@ function checkImageSize() {
         alert("No file selected.");
     }
 }
+
 // send a request to the server to add the menu to order
 function addToCart(button) {
     // Get the menuId from the button
@@ -137,30 +140,15 @@ function previewImage(input) {
         reader.readAsDataURL(file);
     }
 }
-function showCart() {
-    var labelCart = document.getElementById('label-cart');
-    var dashboardOrder = document.getElementById('dashboard-order');
 
-    // Check the current display property
-    var isCartVisible = dashboardOrder.style.display === 'block';
-
-    // Toggle the display property
-    dashboardOrder.style.display = isCartVisible ? 'none' : 'block';
-
-    // Toggle the color
-    labelCart.style.color = isCartVisible ? 'var(--lightGrey)' : 'var(--darkBlack)';
-}
-// make this function call when the page is loaded
-window.onload = function () {
-    // loadCart();
-}
-function openMessdetails(messId){
+function openMessdetails(messId) {
     window.location.href = `/user/mess-details/${messId}`;
 }
 
 function showSearchOverlay() {
     document.getElementById('searchOverlay').style.left = '50px';
 }
+
 function closeSearchOverlay() {
     document.getElementById('searchOverlay').style.left = '-500px';
 }
@@ -203,3 +191,75 @@ function handleBackspace(event) {
 
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keydown", handleBackspace);
+
+$(document).ready(function () {
+    function slideWidth() {
+        return $('.review-box').outerWidth();
+    }
+
+    function resetSlider() {
+        $('.review-carousel').css('transform', 'translateX(-' + slideWidth() * ($('.review-box').length - 1) + 'px)');
+        $('.review-box').first().addClass('active');
+    }
+
+    resetSlider();
+
+    function nextSlide() {
+        $('.review-box.active').removeClass('active').next().addClass('active');
+        $('.review-carousel').css('transform', 'translateX(-' + slideWidth() * ($('.review-box.active').index()) + 'px)');
+    }
+
+    function prevSlide() {
+        $('.review-box.active').removeClass('active').prev().addClass('active');
+        $('.review-carousel').css('transform', 'translateX(-' + slideWidth() * ($('.review-box.active').index()) + 'px)');
+    }
+
+    $('.next').click(function () {
+        if ($('.review-box.active').is(':last-child')) {
+            resetSlider();
+        } else {
+            nextSlide();
+        }
+    });
+
+    $('.prev').click(function () {
+        if ($('.review-box.active').is(':first-child')) {
+            $('.review-box').last().addClass('active');
+            $('.review-carousel').css('transform', 'translateX(-' + slideWidth() * ($('.review-box').length - 1) + 'px)');
+        } else {
+            prevSlide();
+        }
+    });
+
+    setInterval(function () {
+        if ($('.review-box.active').is(':last-child')) {
+            resetSlider();
+        } else {
+            nextSlide();
+        }
+    }, "5000");
+});
+
+function addToFav(element) {
+    let messId = element.getAttribute('messId');
+    console.log(messId);
+    fetch(`/user/add-to-fav/${messId}`)
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            toggleStyle(element);
+            // window.location.reload();
+        })
+        .catch((error) => {
+            alert(error);
+        });
+}
+
+function toggleStyle(element) {
+    element.classList.toggle('favorited');
+}
+function requestCancellation(element){
+    let messId = element.getAttribute('messId');
+    window.location.href = `/user/request-cancellation/${messId}`;
+}

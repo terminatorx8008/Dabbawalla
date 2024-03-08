@@ -14,14 +14,15 @@
             <h1>Customer Says</h1>
         </div>
         <div class="testimonial-box-container">
-            <div class="testimonial-box">
+            <div th:each="m:${messReviews}" class="testimonial-box">
                 <div class="box-top">
                     <div class="profile">
                         <div class="profile-img">
-                            <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=1899&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                            <img th:src="@{'/img/Customer/'+${m.getCustomer().getCustomerImage()}}" alt="">
                         </div>
                         <div class="name-user">
-                            <strong>John Doe</strong>
+                            <strong th:text="${m.getCustomer().getCustomerName()}">John Doe</strong>
+                            <span th:text="${m.getMessReviewDate()}">Customer</span>
                             <span>Customer</span>
                         </div>
                     </div>
@@ -34,7 +35,7 @@
                     </div>
                 </div>
                 <div class="client-review">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.</p>
+                    <p th:text="${m.getMessReview()}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.</p>
                 </div>
             </div>
         </div>

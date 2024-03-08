@@ -22,31 +22,34 @@ public class Mess {
     @JsonIgnore
     private String messRole;
     private String messDescription;
+
+
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "mess",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mess", fetch = FetchType.EAGER)
     private List<MessImages> messImage;
-    @OneToMany(mappedBy ="mess",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "mess", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Menu> menuItems = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "mess",fetch = FetchType.EAGER)
-    private List<MessReview> messReviews=new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mess", fetch = FetchType.EAGER)
+    private List<MessReview> messReviews = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "mess",fetch = FetchType.EAGER)
-    private List<CustomerReview> costumerReviews=new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mess", fetch = FetchType.EAGER)
+    private List<CustomerReview> costumerReviews = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "mess",fetch = FetchType.EAGER)
-    private List<Subscribtion> subscribtions=new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mess", fetch = FetchType.EAGER)
+    private List<Subscribtion> subscribtions = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "mess",fetch = FetchType.EAGER)
+
+    @ManyToMany
     @JsonIgnore
-    private List<Orders> orders=new ArrayList<>();
+    private List<Customer> faviorateCustomers = new ArrayList<>();
 
     public Mess() {
     }
 
-    public Mess(int messId, String messName, String messOwnerName, String messAddress, String messContact, String messEmail, String messPassword, String messRole, String messDescription, List<MessImages> messImage, List<Menu> menuItems, List<MessReview> messReviews, List<CustomerReview> costumerReviews, List<Subscribtion> subscribtions, List<Orders> orders) {
+    public Mess(int messId, String messName, String messOwnerName, String messAddress, String messContact, String messEmail, String messPassword, String messRole, String messDescription, List<MessImages> messImage, List<Menu> menuItems, List<MessReview> messReviews, List<CustomerReview> costumerReviews, List<Subscribtion> subscribtions) {
         this.messId = messId;
         this.messName = messName;
         this.messOwnerName = messOwnerName;
@@ -61,7 +64,7 @@ public class Mess {
         this.messReviews = messReviews;
         this.costumerReviews = costumerReviews;
         this.subscribtions = subscribtions;
-        this.orders = orders;
+
     }
 
     public List<MessImages> getMessImage() {
@@ -177,12 +180,14 @@ public class Mess {
         this.subscribtions = subscribtions;
     }
 
-    public List<Orders> getOrders() {
-        return orders;
+    public List<Customer> getFaviorateCustomers() {
+        return faviorateCustomers;
     }
 
-    public void setOrders(List<Orders> orders) {
-        this.orders = orders;
+    public void setFaviorateCustomers(List<Customer> faviorateCustomers) {
+        this.faviorateCustomers = faviorateCustomers;
     }
+
+
 
 }

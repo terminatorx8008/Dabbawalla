@@ -17,10 +17,6 @@ import java.util.Optional;
 
 @Controller
 public class RedirectController {
-    @Autowired
-    private MenuRepo menuRepo;
-
-
     @GetMapping("/redirectBasedOnRole")
     public String redirectBasedOnRole(Authentication authentication) {
         if (authentication != null) {
@@ -29,13 +25,10 @@ public class RedirectController {
                 return "redirect:/mess/home";
             } else if (authentication.getAuthorities().stream().anyMatch(grantedAuthority ->
                     grantedAuthority.getAuthority().equals("ROLE_USER"))) {
-                return "redirect:/user/home";
+                return "redirect:/user/index";
             }
         }
         return "redirect:/default-home";
     }
-
-
-
 }
 
