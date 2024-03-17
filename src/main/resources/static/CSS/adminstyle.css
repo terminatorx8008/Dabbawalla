@@ -343,8 +343,18 @@ body {
     margin-bottom: 10px;
 }
 .client-review{
+    width: 100%;
     font-size: 0.9rem;
 }
+.client-review .left{
+    float: left;
+    width: 50%;
+}
+.client-review .right{
+    float: right;
+    width: 50%;
+}
+
 /* Alert Styles */
 .alert {
     padding: 15px;

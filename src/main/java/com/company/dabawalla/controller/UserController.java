@@ -4,6 +4,7 @@ import com.company.dabawalla.dao.*;
 import com.company.dabawalla.entities.*;
 import com.company.dabawalla.helper.DateHelper;
 import com.company.dabawalla.helper.Message;
+import com.company.dabawalla.service.NotificationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -36,6 +37,8 @@ public class UserController {
     private MessRepo messRepo;
     @Autowired
     private MessReviewRepo messReviewRepo;
+    @Autowired
+    private NotificationService notificationService;
     private Customer user;
 
     @RequestMapping("/index")
@@ -174,10 +177,11 @@ public class UserController {
         try {
             Mess mess = messRepo.findById(messId).get();
             this.user.setCustomerAddress(userAddress);
-            subscription.setSubscribtionStatus(true);
+//            send a request to the mess owner
+            notificationService.sendNotification(mess);
             subscription.setMess(mess);
             subscription.setCustomer(this.user);
-            if(mess.getSubscribtions().contains(subscription)){
+            if(mess.getSubscribtions().contains(subscription) && subscription.isSubscribtionStatus()){
                 session.setAttribute("subscriptionMessage", new Message("Already Subscribed", "danger"));
                 return "redirect:/user/mess-details/" + messId;
             }

@@ -188,6 +188,7 @@ public class Mess {
         this.faviorateCustomers = faviorateCustomers;
     }
 
-
-
+    public boolean removeSubscribtion(Subscribtion subscribtion) {
+        return this.subscribtions.remove(subscribtion);
+    }
 }

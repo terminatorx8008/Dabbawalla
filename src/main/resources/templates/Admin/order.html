@@ -13,27 +13,31 @@
         <div class="request-heading">
             <h1>Manage Tiffing Requests</h1>
         </div>
+        <div th:if="${session.message}" th:classappend="${'alert-'+session.message.getType()}" class="alert" role="alert">
+            <strong th:text="${session.message.getContent()}">Success!</strong>
+            <label class="closebtn" onclick="this.parentElement.style.display='none';">&times</label>
+        </div>
         <div class="request-box-container">
-            <div th:each="o:${orders}" class="request-box">
+            <div  th:each="o:${subscribtions}" class="request-box">
                 <div class="box-top">
                     <div class="profile">
                         <div class="profile-img">
-                            <img th:src="@{'/img/Customer/' + ${o.getCustomer().getCustomerImage()}}"
+                            <img th:src="@{'/img/Customer/'+${o.getCustomer().getCustomerImage()}}"
                                  alt="Profile Photo">
                         </div>
                         <div class="name-user">
-                            <strong th:text="'Order ID :'+${o.getOrderId()}">John Doe</strong>
-                            <span th:text="${#dates.format(o.getOrderDate(), 'dd-MM-yyyy')}">Order Date</span>
-                            <span th:text="${#dates.format(o.getOrderDate(), 'HH:mm:ss')}">Order Time</span>
+                            <strong th:text="'Order ID : '+${o.getSubscribtionId()}">John Doe</strong>
+                            <span th:text="'Starting Date : '+${o.getSubscribtionStartDate()}">Order Date</span>
+                            <span th:text="'Duration : '+${o.getSubscriptionDuration()}+' month'"></span>
                         </div>
                     </div>
                     <div class="buttom-box">
-                        <a th:href="@{'/order/accept-order/'+${o.getOrderId()}}">
+                        <a th:href="@{'/mess/accept-order/'+${o.getSubscribtionId()}}">
                             <div class="accept-order">
                                 <i class="fa-solid fa-check"></i>
                             </div>
                         </a>
-                        <a th:href="@{'/order/reject-order/'+${o.getOrderId()}}">
+                        <a th:href="@{'/mess/reject-order/'+${o.getSubscribtionId()}}">
                             <div class="reject-order">
                                 <i class="fa-solid fa-x"></i>
                             </div>
@@ -42,9 +46,18 @@
 
                 </div>
                 <div class="client-review">
-                    <p th:text="'Tiffining Address : '+${o.getCustomer().getCustomerAddress()}"></p>
-                    <p th:text="'Custumer Name : '+${o.getCustomer().getCustomerName()}"></p>
-                    <p th:text="'Custumer Number : '+${o.getCustomer().getCustomerContact()}"></p>
+                    <div class="left">
+                        <p>Customer Name :</p>
+                        <p>Customer Email :</p>
+                        <p>Number of Tiffing :</p>
+                        <p>Customer Address :</p>
+                    </div>
+                    <div class="right">
+                        <p th:text="${o.getCustomer().getCustomerName()}"></p>
+                        <p th:text="${o.getCustomer().getCustomerEmail()}"></p>
+                        <p th:text="${o.getNumberOfTiffin()}"></p>
+                        <p th:text="${o.getCustomer().getCustomerAddress()}"></p>
+                    </div>
                 </div>
             </div>
         </div>

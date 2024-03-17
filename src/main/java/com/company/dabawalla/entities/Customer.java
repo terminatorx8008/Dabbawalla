@@ -152,18 +152,20 @@ public class Customer {
         return Objects.equals(customerId, customer.customerId);
     }
 
-    public boolean isSubscribedToMess(Mess mess){
-        for(Subscribtion subscribtion:subscribtions){
-            if(subscribtion.getMess().equals(mess)&& subscribtion.isSubscribtionStatus()){
+    public boolean isSubscribedToMess(Mess mess) {
+        for (Subscribtion subscribtion : subscribtions) {
+            if (subscribtion.getMess().equals(mess) && subscribtion.isSubscribtionStatus()) {
                 return true;
             }
         }
         return false;
     }
-
-
     @Override
     public int hashCode() {
         return Objects.hash(customerId);
+    }
+
+    public boolean removeSubscribtion(Subscribtion subscribtion) {
+        return subscribtions.remove(subscribtion);
     }
 }

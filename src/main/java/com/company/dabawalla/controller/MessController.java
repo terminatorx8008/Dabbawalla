@@ -3,6 +3,8 @@ package com.company.dabawalla.controller;
 import com.company.dabawalla.dao.*;
 import com.company.dabawalla.entities.*;
 import com.company.dabawalla.helper.Message;
+import com.company.dabawalla.service.JavaMailServiceImpl;
+import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -35,6 +37,8 @@ public class MessController {
     private MessImagesRepo messImagesRepo;
     @Autowired
     private MessReviewRepo messReviewRepo;
+    @Autowired
+    private SubsRepo subsRepo;
 
     @RequestMapping("/home")
     public String adminHome(Model model, Principal principal) {
@@ -144,7 +148,6 @@ public class MessController {
         for (MultipartFile file : files) {
             try {
                 String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
                 File saveFile = new ClassPathResource("static/IMG/Mess").getFile();
                 Path path = Path.of(saveFile.getAbsolutePath() + File.separator + fileName);
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -161,10 +164,19 @@ public class MessController {
         }
         return "redirect:/mess/profile";
     }
-
-
+    @RequestMapping("/order-details")
+    public String adminOrder(Model model) {
+        List<Subscribtion> subscribtions = subsRepo.findByMessWhereStatusISFalse(mess);
+        if(subscribtions.size() == 0){
+            model.addAttribute("message", new Message("No new order", "danger"));
+            return "Admin/order";
+        }
+        model.addAttribute("subscribtions",subscribtions);
+        return "Admin/order";
+    }
     @RequestMapping("/subscription-details")
     public String adminSubscription() {
+
         return "Admin/subscription";
     }
 
@@ -187,6 +199,30 @@ public class MessController {
         }
         return "redirect:/mess/profile";
     }
-
-
+    @RequestMapping("/accept-order/{subscribtionId}")
+    public String acceptOrder(@PathVariable("subscribtionId") int subscribtionId, HttpSession session ){
+        Subscribtion subscribtion = mess.getSubscribtions().stream().filter(subscribtion1 -> subscribtion1.getSubscribtionId() == subscribtionId).findFirst().get();
+        subscribtion.setSubscribtionStatus(true);
+        mess.getSubscribtions().add(subscribtion);
+        JavaMailServiceImpl mail = new JavaMailServiceImpl();
+        mail.send(mess.getMessEmail(), "Your Order is being accepted", "Your order is being accepted by the mess");
+        messRepo.save(mess);
+        session.setAttribute("message", new Message("Order accepted successfully", "success"));
+        return "redirect:/mess/order-details";
+    }
+    @RequestMapping("/reject-order/{subscribtionId}")
+    public String rejectOrder(@PathVariable("subscribtionId") int subscribtionId, HttpSession session ){
+        Subscribtion subscribtion = subsRepo.findById(subscribtionId).get();
+        if (subscribtion.getCustomer() != null) {
+            subscribtion.getCustomer().removeSubscribtion(subscribtion);
+        }
+        if (subscribtion.getMess() != null) {
+            subscribtion.getMess().removeSubscribtion(subscribtion);
+        }
+        JavaMailServiceImpl mail = new JavaMailServiceImpl();
+        mail.send(subscribtion.getCustomer().getCustomerEmail(), "Your Order is being rejected", "Your order is being rejected by the mess");
+        subsRepo.delete(subscribtion);
+        session.setAttribute("message", new Message("Order rejected successfully", "success"));
+        return "redirect:/mess/order-details";
+    }
 }

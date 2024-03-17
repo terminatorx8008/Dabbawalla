@@ -40,8 +40,8 @@
                         <button th:classappend="${user.isSubscribedToMess(m)?'hide':'show'}" th:attr="messId=${m.getMessId()}" onclick="openSubscriptionBox()" class="card-button">
                             Request Tiffing
                         </button>
-                        <button th:classappend="${user.isSubscribedToMess(m)?'show':'hide'}" th:attr="messId=${m.getMessId()}" onclick="requestCanclation()" class="card-button cancel">
-                            Cancle Tiffing
+                        <button th:classappend="${user.isSubscribedToMess(m)?'show':'hide'}" th:attr="messId=${m.getMessId()}" onclick="requestCancellation(this)" class="card-button cancel">
+                            Cancel Tiffing
                         </button>
                         <button class="contact-button">
                             <a th:href="'https://wa.me/91'+${m.getMessContact()}" target="_blank">
@@ -49,8 +49,7 @@
                                 <span th:text="${m.getMessContact()}"></span>
                             </a>
                         </button>
-                </div>
-            </div>
+                    </div>
         </div>
     </section>
 

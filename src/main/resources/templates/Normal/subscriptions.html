@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-        <div th:each="subscription:${subscriptions}">
+        <div th:each="subscription:${subscriptions}" th:if="${subscription.isSubscribtionStatus()}">
         <div class="subscribtion-details">
                 <div class="subscribtion-details-box">
                     <div class="subscribtion-details-box-part">
@@ -72,7 +72,7 @@
                         <div th:classappend="${subscription.isSubscribtionStatus()?'show':'hide'}" class="subscribed-icon"><i class="fa-regular fa-circle-check"></i></div>
                     </div>
                     <div class="subscribtion-details-box-part">
-                        <div th:classappend="${subscription.isSubscribtionStatus()?'show':'hide'}" class="cancel-icon"><i class="fa-regular fa-circle-xmark"></i></div>
+                        <div th:classappend="${subscription.isSubscribtionStatus()?'show':'hide'}" th:attr="messId=${subscription.getMess().getMessId()}" onclick="requestCancellation(this)" class="cancel-icon"><i class="fa-regular fa-circle-xmark"></i></div>
                     </div>
                     <div class="subscribtion-details-box-part">
                         <div th:classappend="${subscription.isExpired()?'hide':'show'}" class="renew-icon"><i class="fa-solid fa-money-bills"></i></div>

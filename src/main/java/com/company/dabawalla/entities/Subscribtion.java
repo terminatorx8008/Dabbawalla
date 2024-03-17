@@ -24,7 +24,7 @@ public class Subscribtion {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "mess_id")
     private Mess mess;
 
@@ -141,4 +141,5 @@ public class Subscribtion {
                 ", mess=" + mess +
                 '}';
     }
+
 }
