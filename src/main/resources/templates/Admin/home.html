@@ -18,14 +18,14 @@
             </div>
         </div>
         <div class="customers-container">
-            <div class="customer-card">
+            <div th:each="customer:${customers}" class="customer-card">
                 <div class="customer-image">
-                    <img src="/IMG/default.jpg" alt="Image Banner">
+                    <img th:src="${!customer.getCustomerImage().isEmpty()} ? '/IMG/Customer/' + ${customer.getCustomerImage()} : '/IMG/default.jpg'" alt="Image Banner">
                 </div>
                 <div class="customer-details">
-                    <h3>Customer Name</h3>
-                    <p>Customer Address</p>
-                    <p>Customer Contact</p>
+                    <h3>Customer Name: <span th:text="${customer.getCustomerName()}"></span></h3>
+                    <p>Customer Address : <span th:text="${customer.getCustomerAddress()}"></span></p>
+                    <p>Customer Contact: <span th:text="${customer.getCustomerContact()}"></span></p>
                 </div>
             </div>
         </div>

@@ -10,4 +10,6 @@ import java.util.List;
 public interface SubsRepo extends JpaRepository<Subscribtion,Integer> {
     @Query("from Subscribtion where mess=:mess and subscribtionStatus=false")
     List<Subscribtion> findByMessWhereStatusISFalse(Mess mess);
+    @Query("from Subscribtion where mess=:mess and subscribtionStatus=true")
+    List<Subscribtion> findByMessWhereStatusISTrue(Mess mess);
 }

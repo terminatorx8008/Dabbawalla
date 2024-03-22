@@ -190,7 +190,7 @@ public class UserController {
             messRepo.save(mess);
             userRepo.save(this.user);
             model.addAttribute("user",this.user);
-            session.setAttribute("subscriptionMessage", new Message("Subscribed Successfully", "success"));
+            session.setAttribute("subscriptionMessage", new Message("Subscription request Successfully", "success"));
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("subscriptionMessage", new Message("Something Went Wrong", "danger"));

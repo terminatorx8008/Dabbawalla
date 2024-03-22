@@ -17,6 +17,11 @@
                             <div th:each="image, iterStat : ${m.getMessImage()}" th:classappend="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
                                 <img th:src="@{'/img/Mess/' + ${image.getMessImage()}}" src="/img/default.jpg" class="card-image"/>
                             </div>
+                            <div th:if="${m.getMessImage().isEmpty()}">
+                                <div class="carousel-item active">
+                                    <img src="/img/default.jpg" class="card-image"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-details" th:attr="onclick='openMessdetails(' + ${m.getMessId()} + ')'">

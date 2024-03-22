@@ -110,7 +110,7 @@ public class Subscribtion {
     }
 //    add duration of month to the start date and return the end date
     public LocalDate getSubscriptionEndDate(){
-        return this.subscribtionStartDate.plusMonths(this.subscriptionDuration);
+        return this.subscribtionStartDate.plusDays(this.subscriptionDuration*30);
     }
 //  chcek if the subscription is expired or not
     public boolean isExpired(){

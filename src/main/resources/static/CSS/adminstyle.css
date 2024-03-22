@@ -25,6 +25,7 @@ body {
     padding: 0;
     width: 250px;
     height: max-content;
+    min-height: 300px;
     max-width: 500px;
     text-align: center;
     transition: transform 0.3s;

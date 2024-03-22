@@ -10,17 +10,26 @@
 <section>
     <div class="dashboard">
         <div class="container">
+
             <div class="profile-container">
-                <form method="post" th:action="@{/mess/upload-images}" enctype="multipart/form-data">
-                    <input type="file" name="files" multiple>
-                    <button type="submit">Upload</button>
-                </form>
+                <div th:if="${session.Profilemessage}" th:classappend="${'alert-'+session.Profilemessage.getType()}" class="alert" role="alert">
+                    <strong th:text="${session.Profilemessage.getContent()}">Success!</strong>
+                    <label class="closebtn" onclick="this.parentElement.style.display='none';">&times</label>
+                </div>
+<!--                <form method="post" th:action="@{/mess/upload-images}" enctype="multipart/form-data">-->
+<!--                    <input type="file" name="files" multiple>-->
+<!--                    <button type="submit">Upload</button>-->
+<!--                </form>-->
                 <div class="profile-details">
                     <h2 th:text="${mess.getMessName()}">User Full Name</h2>
                 </div>
                 <div class="edit-form">
                     <h2>Edit Profile</h2>
                     <form action="/mess/update-profile" method="post" enctype="multipart/form-data" id="profileForm">
+
+                        <input type="file" id="fileInput" name="files" accept="image/*"
+                             multiple  onchange="previewImage(this)">
+
                         <label for="messName">Name:</label>
                         <input type="text" id="messName" th:value="${mess.getMessName()}" name="messName"
                                value="User Full Name" required>

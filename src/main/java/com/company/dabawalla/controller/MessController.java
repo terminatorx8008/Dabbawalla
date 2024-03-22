@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -43,7 +44,11 @@ public class MessController {
     @RequestMapping("/home")
     public String adminHome(Model model, Principal principal) {
         this.mess = messRepo.findByMessEmail(principal.getName());
-//        List<Customer> customers = mess.getC();
+//        get subscribed customers
+        List<Subscribtion> subscribtions = this.mess.getSubscribtions();
+        List<Customer> customers = new ArrayList<>();
+        subscribtions.forEach(subscribtion -> customers.add(subscribtion.getCustomer()));
+        model.addAttribute("customers", customers);
         return "Admin/home";
     }
 
@@ -142,28 +147,6 @@ public class MessController {
         return "Admin/profile";
     }
 
-    @PostMapping("/upload-images")
-    public String adminUploadImages(@RequestParam("files") List<MultipartFile> files) {
-        System.out.println("adding files");
-        for (MultipartFile file : files) {
-            try {
-                String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-                File saveFile = new ClassPathResource("static/IMG/Mess").getFile();
-                Path path = Path.of(saveFile.getAbsolutePath() + File.separator + fileName);
-                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
-                MessImages messimage = new MessImages();
-                messimage.setMessImage(fileName);
-                messimage.setMess(this.mess);  // Set the Mess entity in the MessImage
-                this.mess.getMessImage().add(messimage);  // Add the MessImage in the Mess entity
-                this.messRepo.save(this.mess);
-                this.messImagesRepo.save(messimage);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return "redirect:/mess/profile";
-    }
     @RequestMapping("/order-details")
     public String adminOrder(Model model) {
         List<Subscribtion> subscribtions = subsRepo.findByMessWhereStatusISFalse(mess);
@@ -175,8 +158,13 @@ public class MessController {
         return "Admin/order";
     }
     @RequestMapping("/subscription-details")
-    public String adminSubscription() {
-
+    public String adminSubscription(Model model) {
+        List<Subscribtion> subscribtions = subsRepo.findByMessWhereStatusISTrue(mess);
+        if(subscribtions.size() == 0){
+            model.addAttribute("message", new Message("No new order", "danger"));
+            return "Admin/subscription";
+        }
+        model.addAttribute("subscribtions",subscribtions);
         return "Admin/subscription";
     }
 
@@ -186,26 +174,60 @@ public class MessController {
     }
 
     @PostMapping("/update-profile")
-    public String updateProfile(Mess mess, Principal principal) {
+    public String updateProfile(Mess mess, @RequestParam("files") List<MultipartFile> files, HttpSession session){
         try {
-            Mess oldMess = messRepo.findByMessEmail(principal.getName());
+            Mess oldMess = this.mess;
             oldMess.setMessName(mess.getMessName());
             oldMess.setMessAddress(mess.getMessAddress());
             oldMess.setMessContact(mess.getMessContact());
             oldMess.setMessEmail(mess.getMessEmail());
             messRepo.save(oldMess);
+
+            // Assuming you want to delete all previous images and add new ones
+            // Step 1: Delete previous images from storage
+
+            // Note: Implement deleteImagesFromStorage method to delete images from the file system
+
+            // Step 2: Delete previous images from the database
+            List<MessImages> existingImages = oldMess.getMessImage();
+            if(existingImages != null){
+                for(MessImages img : existingImages){
+                    messImagesRepo.delete(img);
+                }
+            }
+
+            // Step 3: Save new images
+            for (MultipartFile file : files) {
+                try {
+                    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+                    File saveFile = new ClassPathResource("static/IMG/Mess").getFile();
+                    Path path = Path.of(saveFile.getAbsolutePath() + File.separator + fileName);
+                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+                    MessImages messImages = new MessImages();
+                    messImages.setMess(oldMess);
+                    messImages.setMessImage(fileName);
+                    messImagesRepo.save(messImages);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            session.setAttribute("Profilemessage", new Message("Profile updated successfully", "success"));
         } catch (Exception e) {
             e.printStackTrace();
+            session.setAttribute("Profilemessage", new Message("Something went wrong", "danger"));
         }
         return "redirect:/mess/profile";
     }
+
     @RequestMapping("/accept-order/{subscribtionId}")
     public String acceptOrder(@PathVariable("subscribtionId") int subscribtionId, HttpSession session ){
         Subscribtion subscribtion = mess.getSubscribtions().stream().filter(subscribtion1 -> subscribtion1.getSubscribtionId() == subscribtionId).findFirst().get();
         subscribtion.setSubscribtionStatus(true);
         mess.getSubscribtions().add(subscribtion);
         JavaMailServiceImpl mail = new JavaMailServiceImpl();
-        mail.send(mess.getMessEmail(), "Your Order is being accepted", "Your order is being accepted by the mess");
+        mail.send(subscribtion.getCustomer().getCustomerEmail(), "Your Order is being accepted", "Your order is being accepted by the mess");
         messRepo.save(mess);
         session.setAttribute("message", new Message("Order accepted successfully", "success"));
         return "redirect:/mess/order-details";

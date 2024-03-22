@@ -16,7 +16,11 @@
         </div>
         <div class="mess-detail-card">
             <div class="image-grid">
-                <img th:each="images:${mess.getMessImage()}" th:src="@{'/img/Mess/' + ${images.getMessImage()}}">
+                <img th:if="${!mess.getMessImage().isEmpty()}"  th:each="images:${mess.getMessImage()}" th:src="@{'/img/Mess/' + ${images.getMessImage()}}">
+                <img th:if="${mess.getMessImage().isEmpty()}" src="/img/default.jpg" alt="">
+                <img th:if="${mess.getMessImage().isEmpty()}" src="/img/default.jpg" alt="">
+                <img th:if="${mess.getMessImage().isEmpty()}" src="/img/default.jpg" alt="">
+                <img th:if="${mess.getMessImage().isEmpty()}" src="/img/default.jpg" alt="">
             </div>
             <div class="mess-detail-card-details">
                 <div class="left">
