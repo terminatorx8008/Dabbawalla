@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Admin/base::Layout(~{::section})">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<section>
+    <div class="dashboard">
+        <div class="subscription-heading">
+            <span>Every</span>
+            <h1>Subscriptions</h1>
+            <span>You have :</span>
+        </div>
+        <div class="subscription-box">
+            <div class="subscribtion-details">
+                <div class="subscribtion-details-box">
+                    <div class="subscribtion-details-box-part">
+                        <span>S. No.</span>
+                    </div>
+                    <div class="subscribtion-details-box-part">
+                        <span>Contact No.</span>
+                    </div>
+                    <div class="subscribtion-details-box-part">
+                        <span>Customer Name</span>
+                    </div>
+                    <div class="subscribtion-details-box-part">
+                        <span>Start Date</span>
+                    </div>
+                    <div class="subscribtion-details-box-part">
+                        <span>End Date</span>
+                    </div>
+                    <div class="subscribtion-details-box-part">
+                        <span>Day Left</span>
+                    </div>
+                    <div class="subscribtion-details-box-part">
+                        <span>Number of Tiffin</span>
+                    </div>
+                    <div class="subscribtion-details-box-part">
+                        <span>Status</span>
+                    </div>
+                </div>
+            </div>
+            <div th:each="subscription,stat:${subscribtions}" th:if="${subscription.isSubscribtionStatus()}">
+                <div class="subscribtion-details">
+                    <div class="subscribtion-details-box">
+                        <div class="subscribtion-details-box-part">
+                            <span th:text="${stat.count}"></span>
+                        </div>
+                        <div class="subscribtion-details-box-part">
+                            <span th:text="${subscription.getCustomer().getCustomerContact()}"></span>
+                        </div>
+                        <div class="subscribtion-details-box-part">
+                            <span th:text="${subscription.getCustomer().getCustomerName()}">12/12/2021</span>
+                        </div>
+                        <div class="subscribtion-details-box-part">
+                            <span th:text="${subscription.getSubscribtionStartDate()}">12/12/2021</span>
+                        </div>
+                        <div class="subscribtion-details-box-part">
+                            <span th:text="${subscription.getSubscriptionEndDate()}">1 Month</span>
+                        </div>
+                        <div class="subscribtion-details-box-part">
+                            <span th:text="${subscription.getDaysLeft()}">1 Month</span>
+                        </div>
+                        <div class="subscribtion-details-box-part">
+                            <span th:text="${subscription.getNumberOfTiffin()}">30</span>
+                        </div>
+                        <div class="subscribtion-details-box-part">
+                            <div th:classappend="${subscription.isSubscribtionStatus()?'show':'hide'}" class="subscribed-icon"><i class="fa-regular fa-circle-check"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

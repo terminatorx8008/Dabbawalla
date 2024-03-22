@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Admin/base::Layout(~{::section})">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<section>
+    <div class="dashboard">
+        <div class="dashboard-banner">
+            <img src="https://images.unsplash.com/photo-1589010588553-46e8e7c21788?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image Banner">
+            <div class="banner-promo">
+                <h1><span>50% OFF</span></h1>
+                <h1>On All Tiffin Center</h1>
+                <p>Order Tiffin from favourite place near you.</p>
+            </div>
+        </div>
+        <div class="customers-container">
+            <div th:each="customer:${customers}" class="customer-card">
+                <div class="customer-image">
+                    <img th:src="${!customer.getCustomerImage().isEmpty()} ? '/IMG/Customer/' + ${customer.getCustomerImage()} : '/IMG/default.jpg'" alt="Image Banner">
+                </div>
+                <div class="customer-details">
+                    <h3>Customer Name: <span th:text="${customer.getCustomerName()}"></span></h3>
+                    <p>Customer Address : <span th:text="${customer.getCustomerAddress()}"></span></p>
+                    <p>Customer Contact: <span th:text="${customer.getCustomerContact()}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

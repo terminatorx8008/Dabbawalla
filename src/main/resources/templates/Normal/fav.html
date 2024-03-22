@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Normal/base::Layout(~{::section})">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <section>
+        <div class="dashboard">
+            <div class="dashboard-content">
+                <div th:each="m:${messes}" class="dashboard-card">
+                    <div class="fas fa-heart favorited" th:attr="messId=${m.getMessId()}"  onclick="addToFav(this)" id="heart"></div>
+                    <div th:id="'carouselExampleSlidesOnly'+${m.getMessId()}" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div th:each="image, iterStat : ${m.getMessImage()}" th:classappend="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
+                                <img th:src="@{'/img/Mess/' + ${image.getMessImage()}}" src="/img/default.jpg" class="card-image"/>
+                            </div>
+                            <div th:if="${m.getMessImage().isEmpty()}">
+                                <div class="carousel-item active">
+                                    <img src="/img/default.jpg" class="card-image"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-details" th:attr="onclick='openMessdetails(' + ${m.getMessId()} + ')'">
+                        <h3 th:text="${m.getMessName()}">Amazing Pizza</h3>
+                        <div class="card-details-rating">
+                            <span>4.5</span>
+                            <span class="fas fa-star"></span>
+                            <span class="fas fa-star"></span>
+                            <span class="fas fa-star"></span>
+                            <span class="fas fa-star"></span>
+                            <span class="fas fa-star-half-alt"></span>
+                        </div>
+                        <p><i class="fa-solid fa-location-dot"></i>&nbsp;Address :<span
+                                th:text="${m.getMessAddress()}"></span></p>
+                        <p><i class="fa-regular fa-user"></i>&nbsp;Owner Name :<span
+                                th:text="${m.getMessOwnerName()}"></span></p>
+                        <p><i class="fa-solid fa-info"></i>&nbsp;Mess Details :<span
+                                th:text="${m.getMessDescription()}"></span></p>
+                    </div>
+                    <div class="buttons">
+                        <button th:classappend="${user.isSubscribedToMess(m)?'hide':'show'}" th:attr="messId=${m.getMessId()}" onclick="openSubscriptionBox()" class="card-button">
+                            Request Tiffing
+                        </button>
+                        <button th:classappend="${user.isSubscribedToMess(m)?'show':'hide'}" th:attr="messId=${m.getMessId()}" onclick="requestCancellation(this)" class="card-button cancel">
+                            Cancel Tiffing
+                        </button>
+                        <button class="contact-button">
+                            <a th:href="'https://wa.me/91'+${m.getMessContact()}" target="_blank">
+                                <label class="fa-brands fa-whatsapp"></label>
+                                <span th:text="${m.getMessContact()}"></span>
+                            </a>
+                        </button>
+                    </div>
+        </div>
+    </section>
+
+</body>
+</html>

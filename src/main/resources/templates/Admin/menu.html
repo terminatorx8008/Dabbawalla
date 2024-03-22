@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="Admin/base::Layout(~{::section})">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<section>
+    <div class="dashboard">
+        <div class="menu-categories">
+<!--          add menu for sunday , monday etc-->
+            <button class="category-btn active" onclick="filterMenuByDay('Sunday')">Sunday</button>
+            <button class="category-btn" onclick="filterMenuByDay('Monday')">Monday</button>
+            <button class="category-btn" onclick="filterMenuByDay('Tuesday')">Tuesday</button>
+            <button class="category-btn" onclick="filterMenuByDay('Wednesday')">Wednesday</button>
+            <button class="category-btn" onclick="filterMenuByDay('Thursday')">Thursday</button>
+            <button class="category-btn" onclick="filterMenuByDay('Friday')">Friday</button>
+            <button class="category-btn" onclick="filterMenuByDay('Saturday')">Saturday</button>
+        </div>
+    <!-- Menu Categories -->
+    <div class="menu-categories">
+        <button class="category-btn active" onclick="filterMenu('all')">All</button>
+        <button class="category-btn" onclick="filterMenu('Morning')">Morning</button>
+        <button class="category-btn" onclick="filterMenu('Evening')">Evening</button>
+        <button class="category-btn" onclick="filterMenu('Night')">Night</button>
+    </div>
+<!--show menu dynamically from db-->
+        <div th:if="${session.message}" th:classappend="${'alert-'+session.message.getType()}" class="alert" role="alert" >
+            <span th:text="${session.message.getContent()}"></span>
+            <span class="close-btn" onclick="closeAlert()"><i class="fa-solid fa-xmark"></i></span>
+        </div>
+    <!-- Menu Items -->
+    <div class="menu-items">
+        <!-- Sample Morning Item -->
+        <div th:each="m :${menuList}" th:id="'menuItem-' + ${m.menuId}" th:classappend="${m.getMenuTiming()}" class="menu-item">
+            <img th:src="@{'/img/Menu/'+${m.getMenuId()+'.jpg'}}" src="/img/default.jpg" />
+                <h4 th:text="${m.getMenuName()}"></h4>
+                <h4 th:text="${m.getMenuPrice()}+'&#8377;'"></h4>
+                <p th:text="${m.getMenuDescription()}">Spicy Cheese Pizza with extra cheese.</p>
+                <p th:text="${m.getMenuTiming()}"><span class="fas fa-clock"></span>15-30 mins</p>
+                <p id="menuDay" th:text="${m.getMenuDay()}"><span class="fas fa-clock"></span>15-30 mins</p>
+                <div class="menu-btn">
+<!--            send menu details to form after clicking on the edit -->
+                    <a class="edit-btn" th:attr="data-menuId=${m.menuId}, data-menuName=${m.menuName}, data-menuPrice=${m.menuPrice}, data-menuTiming=${m.menuTiming}, data-menuDay=${m.menuDay}, data-menuImage=${m.menuImage}, data-menuDescription=${m.menuDescription}" onclick="openEditPanel(this)">Edit</a>
+                    <a th:href="@{'/mess/delete-menu/'+${m.getMenuId()}}"  class="delete-btn">Delete</a>
+                </div>
+        </div>
+
+        <!-- Add more menu items here -->
+        <div class="add-item-card" onclick="openAddPanel()">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+
+    </div>
+
+    <!-- Edit Panel -->
+    <div class="edit-panel" id="editPanel">
+<!--        form to take input for item name, prize, timing , image and description -->
+<!--        make a x to cancle the form-->
+        <label class="cross-label" onclick="closeEditPanel()"><i class="fa-solid fa-xmark"></i></label>
+        <form th:action="@{/mess/update-menu}"  th:object="${menu}" method="post" enctype="multipart/form-data">
+            <input name="menuId" type="hidden" id="itemId">
+            <div class="form-group">
+                <label for="itemName">Item Name</label>
+                <input name="menuName" type="text" class="form-control" id="itemName" placeholder="Enter Item Name" required>
+            </div>
+            <div class="form-group">
+                <label for="itemPrice">Item Price</label>
+                <input name="menuPrice" type="number" class="form-control" id="itemPrice" placeholder="Enter Item Price" required>
+            </div>
+            <div class="form-group">
+                <label for="itemTiming">Item Timing</label>
+                <select name="menuTiming" class="form-control" id="itemTiming">
+                    <option>Morning</option>
+                    <option>Evening</option>
+                    <option>Night</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="itemDay">Item Day</label>
+                <select name="menuDay" class="form-control" id="itemDay">
+                    <option>Monday</option>
+                    <option>Tuesday</option>
+                    <option>Wednesday</option>
+                    <option>Thursday</option>
+                    <option>Friday</option>
+                    <option>Saturday</option>
+                    <option>Sunday</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="itemImage">Item Image</label>
+<!--                check img size to be less than 5mb and type jpg only-->
+                <input type="file" name="Image" class="form-control" id="itemImage" placeholder="Enter Item Image" onchange="checkImageSize()" required>
+            </div>
+            <div class="form-group">
+                <label for="itemDescription">Item Description</label>
+                <input name="menuDescription" type="text" class="form-control" id="itemDescription" placeholder="Enter Item Description" required>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+            <button class="cancel-btn" onclick="closeEditPanel()">Cancel</button>
+        </form>
+    </div>
+        <div class="edit-panel" id="addPanel">
+<!--        form to take input for item name, prize, timing , image and description -->
+<!--        make a x to cancle the form-->
+        <label class="cross-label" onclick="closeEditPanel()"><i class="fa-solid fa-xmark"></i></label>
+        <form th:action="@{/mess/add-menu}" th:object="${menu}"  method="post" enctype="multipart/form-data">
+            <input name="menuId" type="hidden" th:value="${menu.getMenuId()}" id="additemId">
+            <div class="form-group">
+                <label for="itemName">Item Name</label>
+                <input name="menuName" type="text" class="form-control" id="additemName" placeholder="Enter Item Name" required>
+            </div>
+            <div class="form-group">
+                <label for="itemPrice">Item Price</label>
+                <input name="menuPrice" type="number" class="form-control" id="additemPrice" placeholder="Enter Item Price" required>
+            </div>
+            <div class="form-group">
+                <label for="itemTiming">Item Timing</label>
+                <select name="menuTiming" class="form-control" id="additemTiming">
+                    <option>Morning</option>
+                    <option>Evening</option>
+                    <option>Night</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="itemDay">Item Day</label>
+                <select name="menuDay" class="form-control" id="additemDay">
+                    <option>Monday</option>
+                    <option>Tuesday</option>
+                    <option>Wednesday</option>
+                    <option>Thursday</option>
+                    <option>Friday</option>
+                    <option>Saturday</option>
+                    <option>Sunday</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="itemImage">Item Image</label>
+<!--                check img size to be less than 5mb and type jpg only-->
+                <input type="file" name="Image" class="form-control" id="additemImage" placeholder="Enter Item Image" onchange="checkImageSize()" required>
+            </div>
+            <div class="form-group">
+                <label for="itemDescription">Item Description</label>
+                <input name="menuDescription" type="text" class="form-control" id="additemDescription" placeholder="Enter Item Description" required>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+            <button class="cancel-btn" type="button" onclick="closeEditPanel()">Cancel</button>
+        </form>
+    </div>
+    </div>
+
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+<script th:src="@{/JS/script.js}"></script>
+</body>
+</html>

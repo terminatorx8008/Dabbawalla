@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        // onloading this page take the loaction find the city and fetch the content from the server
+        // and display the content in the page
+        // check that it should work only for the first time when the page is loaded
+        // if the page is refreshed then it should not work
+        window.onload = function() {
+            function showPosition(position) {
+                console.log("Latitude: " + position.coords.latitude +"<br>Longitude: " + position.coords.longitude);
+                var lat = position.coords.latitude;
+                var long = position.coords.longitude;
+                var url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" + lat + "&longitude=" + long + "&localityLanguage=en";
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        console.log(data.city);
+                        sessionStorage.setItem("city", data.city);
+                        window.location.href = "/user/home?city=" + data.city;
+                    });
+            }
+            // get the location of the user
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+    </script>
+</body>
+</html>
