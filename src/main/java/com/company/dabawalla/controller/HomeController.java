@@ -81,6 +81,7 @@ public class HomeController {
             if (mess.getMessImage() == null) {
                 mess.setMessImage(new ArrayList<>());
             }
+            mess.setMessPassword(bCryptPasswordEncoder.encode(mess.getMessPassword()));
             mess.setMessRole("ROLE_MESS");
             for (MultipartFile file : files) {
                 try {

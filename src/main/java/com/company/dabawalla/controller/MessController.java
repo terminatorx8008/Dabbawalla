@@ -47,8 +47,11 @@ public class MessController {
 //        get subscribed customers
         List<Subscribtion> subscribtions = this.mess.getSubscribtions();
         List<Customer> customers = new ArrayList<>();
-        subscribtions.forEach(subscribtion -> customers.add(subscribtion.getCustomer()));
-        model.addAttribute("customers", customers);
+        if(subscribtions != null)
+        {
+            subscribtions.forEach(subscribtion -> customers.add(subscribtion.getCustomer()));
+            model.addAttribute("customers", customers);
+        }
         return "Admin/home";
     }
 
