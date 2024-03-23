@@ -95,13 +95,12 @@ public class HomeController {
                     messimage.setMess(mess);  // Set the Mess entity in the MessImage
                     mess.getMessImage().add(messimage);
                     mess.setMessPassword(bCryptPasswordEncoder.encode(mess.getMessPassword()));
-                    this.messRepo.save(mess);
                     messImagesRepo.save(messimage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
+            this.messRepo.save(mess);
         }
         catch (Exception e){
             System.out.println(e);
