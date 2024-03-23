@@ -97,6 +97,33 @@ form {
 .otp{
     display: none;
 }
+.email-input{
+    display: grid;
+    grid-template-columns: 90% 10%;
+    align-items: center;
+    justify-items: center;
+}
+
+.email-input input{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+    font-size: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    margin: 0 0.5rem;
+}
+.email-input label{
+    background-color: #007bff;
+
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+}
 .otp-form {
     display: flex;
 }

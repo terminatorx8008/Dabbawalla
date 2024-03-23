@@ -58,13 +58,14 @@ confirmPasswordInput.addEventListener("input", () => {
         }
     }
 });
+isvalidemail = false;
 emailInput.addEventListener("input", () => {
     const email = emailInput.value;
     const emailMessage = document.getElementById("email-message");
     if (email.includes("@") && email.includes(".")) {
         emailMessage.textContent = "Valid Email";
         emailMessage.className = "success";
-        document.querySelector(".otp").style.display = "block";
+        isvalidemail = true;
     } else {
         emailMessage.textContent = "Invalid Email";
         emailMessage.className = "error";
@@ -78,7 +79,24 @@ checkOtp = () => {
         otpValue += input.value;
     });
     if (otpValue.length === 6) {
-        alert("OTP Verified"+ otpValue);
+        const email = document.getElementById("email").value;
+        // Perform AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/verify-otp', // Replace with your server-side endpoint
+            data: { email: email, otp: otpValue },
+            success: function(response) {
+                console.log('OTP verified successfully:', response);
+                alert('OTP verified successfully.');
+                $('#signup-btn').prop('disabled', false);
+                // You can handle the response here, such as showing a success message to the user
+            },
+            error: function(xhr, status, error) {
+                console.error('Error verifying OTP:', error);
+                alert('Error verifying OTP. Please try again.');
+                // You can handle errors here, such as displaying an error message to the user
+            }
+        });
     } else {
         alert("Please enter the complete OTP");
     }
@@ -87,6 +105,30 @@ $(document).ready(function () {
     $("input").keyup(function () {
         if (this.value.length == this.maxLength) {
             $(this).next('input').focus();
+        }
+    });
+    $("#otp").click(function () {
+        if(isvalidemail) {
+            document.querySelector(".otp").style.display = "block";
+            const email = $('#email').val();
+            // Perform AJAX request
+            $.ajax({
+                type: 'POST',
+                url: '/send-otp', // Replace with your server-side endpoint
+                data: { email: email },
+                success: function(response) {
+                    console.log('OTP sent successfully:', response);
+                    alert('OTP sent successfully. Please check your email.');
+                    // You can handle the response here, such as showing a success message to the user
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending OTP:', error);
+                    alert('Error sending OTP. Please try again.');
+                    $('#email').innerText = '';
+                    // You can handle errors here, such as displaying an error message to the user
+                }
+            });
+            $('#otp-label').prop('disabled', true);
         }
     });
 });

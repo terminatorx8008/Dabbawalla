@@ -53,4 +53,11 @@ public class JavaMailServiceImpl {
             e.printStackTrace();
         }
     }
+
+    public void sendOTP(String email,String generateOTP){
+        send(email, "OTP for Dabawalla", "Your OTP is: "+generateOTP);
+    }
+
+
+
 }

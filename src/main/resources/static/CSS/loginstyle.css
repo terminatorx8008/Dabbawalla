@@ -80,6 +80,41 @@ form.sign-up-form {
 form.sign-in-form {
     z-index: 2;
 }
+.input-field label{
+    display: none;
+    text-align: center;
+    line-height: 55px;
+    color: #acacac;
+    font-weight: bold;
+    transition: 0.5s;
+    font-size: 1.1rem;
+}
+.input-field input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+.otp-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+#otp-field{
+    display: grid!important;
+    grid-template-columns: 10% 70% 20%!important;
+}
+.otp-btn{
+    display: block;
+    background-color: #5995fd;
+    border-radius: 49px;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 5px;
+    font-weight: 600;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: 0.5s;}
 
 .title {
     font-size: 2.2rem;

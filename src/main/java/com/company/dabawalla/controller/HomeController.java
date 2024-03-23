@@ -6,8 +6,10 @@ import com.company.dabawalla.dao.UserRepo;
 import com.company.dabawalla.entities.Customer;
 import com.company.dabawalla.entities.Mess;
 import com.company.dabawalla.entities.MessImages;
+import com.company.dabawalla.service.JavaMailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +22,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -34,6 +34,15 @@ public class HomeController {
     private MessRepo messRepo;
     @Autowired
     private MessImagesRepo messImagesRepo;
+    private final Map<String, String> otpMap = new HashMap<>();
+
+    private String generateRandomOtp() {
+        Random random = new Random();
+        int otp = 100000 + random.nextInt(900000);
+        return String.valueOf(otp);
+    }
+
+
     @RequestMapping("/")
     public String home(Model model){
         model.addAttribute("title", "Login - Dabawalla");
@@ -107,5 +116,21 @@ public class HomeController {
         return "errorPage";
     }
 
-
+    @PostMapping("/send-otp")
+    @ResponseBody
+    public ResponseEntity<?> sendOTP(@RequestParam("email") String email){
+        JavaMailServiceImpl mail = new JavaMailServiceImpl();
+        String generateOTP = generateRandomOtp();
+        otpMap.put(email, generateOTP);
+        mail.sendOTP(email,generateOTP);
+        return ResponseEntity.ok("OTP Sent");
+    }
+    @PostMapping("/verify-otp")
+    @ResponseBody
+    public ResponseEntity<?> verifyOtp(@RequestParam("email") String email, @RequestParam("otp") String otp){
+        String storedOtp = otpMap.get(email);
+        if(storedOtp != null && storedOtp.equals(otp))
+            return  ResponseEntity.ok("OTP Verified");
+        return ResponseEntity.internalServerError().body("Invalid OTP");
+    }
 }
